@@ -12,8 +12,8 @@ const PostItem = props =>{
                 <img src={postCover} alt="cover"/>
             </div>
             <div className="flex items-center">
-            <button className="bg-sky-50 text-gray-500 rounded-full py-1 px-3">frontend</button>
-            <button className="bg-sky-50 text-gray-500 rounded-full py-1 px-3">frontend</button>
+            <button className="bg-sky-50 text-gray-500 rounded-full py-1 px-3 mr-2">frontend</button>
+            <button className="bg-sky-50 text-gray-500 rounded-full py-1 px-3 mr-2">frontend</button>
             <button className="bg-sky-50 text-gray-500 rounded-full py-1 px-3">frontend</button>
             </div>
         </div>

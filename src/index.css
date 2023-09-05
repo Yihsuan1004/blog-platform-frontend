@@ -17,3 +17,6 @@ code {
     monospace;
 }
 
+.ql-container{
+  min-height: 200px;
+}
