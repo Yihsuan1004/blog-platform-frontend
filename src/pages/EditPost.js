@@ -32,6 +32,14 @@ const EditPost = (props) => {
             ],
         ],
     };
+
+    //onChange事件可以拿到 (content, delta, source, editor)
+    const handleChangeValue = (value,delta) => {
+      console.log("rich text", value);
+      console.log("rich text", delta);
+      setValue(value);
+    };
+
   return (
     <div className="w-screen py-16">
       <div className="w-[720px] mx-auto py-20">
@@ -73,10 +81,11 @@ const EditPost = (props) => {
                 placeholder="Enter your rich text edtior"
                 modules={modules}
                 value={value}
-                onChange={setValue}
+                onChange={handleChangeValue}
             />
           </div>
         </div>
+        {<div dangerouslySetInnerHTML={{ __html: value }} />}
       </div>
     </div>
   );
