@@ -1,7 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import api from "../api/api";
 
 const LoginPage = props =>{
 
+    const navigate = useNavigate();
 
     const [email,setEmail] = useState('');
     const [emailTouched, setEmailTouched] = useState(false);
@@ -51,22 +54,13 @@ const LoginPage = props =>{
             password
         }
 
-        fetch(
-            "http://localhost:5200/api/auth/login",
-            {
-              method: "POST",
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(userData)
-            }
-        )
-        .then((response) => response.json())
+        api.post('/auth/login',userData)
         .then((result) => {
-          console.log(result);
+            localStorage.setItem('user', JSON.stringify(result));
+            navigate('/');
         })
         .catch((error) => {
-          console.error(error);
+            console.error(error);
         });
     }
 

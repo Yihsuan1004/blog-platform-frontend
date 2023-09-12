@@ -4,6 +4,7 @@ import avatar from '../assets/bear-avatar.svg';
 import { Link } from 'react-router-dom';
 
 const HomePage = props =>{
+
     return <Fragment>
         <div className="w-screen py-16 border-b border-gray-200">
             <div className="w-[720px] mx-auto flex justify-between items-center">

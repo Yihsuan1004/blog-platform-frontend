@@ -1,8 +1,13 @@
 import { Fragment } from "react";
 import logoImage from '../../assets/logo.svg';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 const Header = props =>{
+    const { isLoggedIn } = useAuth();
+
+    console.log('isLoggedIn',isLoggedIn);
+
     return <Fragment>
         <header className="w-screen h-14 bg-sky-700 flex justify-between items-center px-8">
             <Link to="/">
@@ -13,7 +18,7 @@ const Header = props =>{
             </Link>
             <div className="text-gray-200">
             <Link to="/edit-post/new">
-                <button className="px-4 py-2 hover:text-white">發布</button>
+                { !isLoggedIn || <button className="px-4 py-2 hover:text-white">發布</button> }
             </Link>
                 <button className="px-4 py-2 hover:text-white">標籤</button>
                 <button className="px-4 py-2 hover:text-white">關於我</button>

@@ -5,6 +5,7 @@ import BlogPost from './pages/BlogPost';
 import EditPost from './pages/EditPost';
 import RootLayout  from './pages/Root';
 import Login  from './pages/Login';
+import { AuthProvider } from './contexts/AuthContext';
 
 const router = createBrowserRouter([
   { 
@@ -26,7 +27,9 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <RouterProvider router={router}/>
+    <AuthProvider>
+      <RouterProvider router={router}/>
+    </AuthProvider>
   );
 }
 
