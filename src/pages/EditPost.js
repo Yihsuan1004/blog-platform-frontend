@@ -3,15 +3,64 @@ import ReactQuill, { Quill } from "react-quill";
 import ImageUploader from "quill-image-uploader";
 import 'react-quill/dist/quill.snow.css';
 import api from '../api/api';
-
+import { TagsInput } from "react-tag-input-component";
 // register module
 Quill.register("modules/imageUploader", ImageUploader);
 
 const EditPost = (props) => {
 
     const [title, setTitle] = useState("");
+    const [titleTouched, setTitleTouched] = useState(false);
 
-    const [value, setValue] = useState("");
+    const [tags, setTags] = useState([]);
+    const [tagsTouched, setTagsTouched] = useState(false);
+
+    const [content, setContent] = useState("");
+    const [contentTouched, setContentTouched] = useState(false);
+
+
+    const titleIsValid = title.trim() !== '';
+    const titleInputIsInValid = !titleIsValid && titleTouched;
+
+    const tagsIsValid = tags.length > 0 ;
+    console.log(tagsIsValid);
+    const tagsInputIsInValid = !tagsIsValid && tagsTouched;
+
+    const contentIsValid = content.trim() !== '' ;
+    const contentInputIsInValid = !contentIsValid && contentTouched;
+    
+     
+    const handleTitleInputChange  = event =>{
+      setTitleTouched(true);
+      setTitle(event.target.value);
+  }
+
+  const handleTitleInputBlur  = event =>{
+      setTitleTouched(true);
+  }
+
+  const handleTagsInputChange  = event =>{
+      console.log(event);
+      setTags(event.target.value);
+      setTagsTouched(true);
+  }
+
+  const handleTagsInputBlur  = () =>{
+    console.log('blur');
+    setTagsTouched(true);
+  }
+
+  //onChange事件可以拿到 (content, delta, source, editor)
+  const handleContentChange = (value,delta) => {
+    console.log("rich text", value);
+    setContent(value);
+    setContentTouched(true);
+  };
+
+  const handleContentBlur  = event =>{
+    setContentTouched(true);
+  }
+
 
     const modules = {
         toolbar: [
@@ -64,25 +113,29 @@ const EditPost = (props) => {
         // }
     };
 
-    //onChange事件可以拿到 (content, delta, source, editor)
-    const handleChangeValue = (value,delta) => {
-      console.log("rich text", value);
-      setValue(value);
-    };
+  
 
     const handleCreate = () =>{
       const post = {
         title: title,
-        content: value
+        tags: tags,
+        content: content
       }
+
+      console.log(post);
 
       api.post('/posts',post).then(response => {
         console.log(response.data);
       }).catch((error) => {
         console.error(error);
       });
-
     }
+
+
+    
+  const titleInputClasses = titleInputIsInValid ? 'border-red-300 focus:ring-red-500' : 'border-slate-300 focus:ring-sky-500'  ;
+  const tagsInputClasses = tagsInputIsInValid ? 'border-red-300 focus:ring-red-500' : 'border-slate-300 focus:ring-sky-500';
+  console.log(tagsInputClasses);
 
   return (
     <div className="w-screen py-16">
@@ -92,31 +145,25 @@ const EditPost = (props) => {
           <input
             type="text"
             value={title}
-            onChange={e => setTitle(e.target.value)}
-            className="mt-1 block w-full px-3 py-2 bg-white border 
-                    border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-                    focus:outline-none focus:border-sky-700 focus:ring-1 focus:ring-sky-500
-                    "
+            placeholder="請輸入文章標題"
+            onChange={handleTitleInputChange}
+            onBlur={handleTitleInputBlur}
+            className={`mt-1 block w-full px-3 py-2 bg-white border 
+                     rounded-md text-sm shadow-sm placeholder-slate-400
+                    focus:outline-none focus:ring-1 ${titleInputClasses}`}
+                    
           />
+          {!titleInputIsInValid || <p className="text-red-500 text-sm">標題為必填欄位</p>}
         </div>
         <div className="mb-8">
           <h3 className="text-2xl font-bold">文章分類</h3>
-          <input
-            type="text"
-            className="mt-1 block w-full px-3 py-2 bg-white border 
-                    border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-                    focus:outline-none focus:border-sky-700 focus:ring-1 focus:ring-sky-500
-                    "
-          />
-        </div>
-        <div className="mb-8">
-          <h3 className="text-2xl font-bold">文章封面</h3>
-          <input
-            type="text"
-            className="mt-1 block w-full px-3 py-2 bg-white border 
-                    border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-                    focus:outline-none focus:border-sky-700 focus:ring-1 focus:ring-sky-500
-                    "
+          <TagsInput
+            value={tags}
+            className={tagsInputClasses}
+            onChange={setTags}
+            onBlur={handleTagsInputBlur}
+            name="fruits"
+            placeHolder="輸入文章分類"
           />
         </div>
         <div className="mb-8">
@@ -126,18 +173,19 @@ const EditPost = (props) => {
                 theme="snow"
                 placeholder="Enter your rich text edtior"
                 modules={modules}
-                value={value}
-                onChange={handleChangeValue}
+                value={content}
+                onChange={(e) =>handleContentChange}
+                onBlur={handleContentBlur}
             />
           </div>
         </div>
-        <div>
+        <div className="text-right">
           <button className="bg-sky-700 text-white px-2 py-1 rounded" 
                   onClick={handleCreate}>
                   發布
           </button>
         </div>
-        {<div dangerouslySetInnerHTML={{ __html: value }} />}
+        {/* {<div dangerouslySetInnerHTML={{ __html: value }} />} */}
       </div>
     </div>
   );
