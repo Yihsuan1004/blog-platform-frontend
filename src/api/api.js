@@ -6,11 +6,12 @@ const api = axios.create({
 
 // 使用請求攔截器(interceptor)為每個請求添加 token
 api.interceptors.request.use((config) => {
-
   if (config.url !== '/auth/login') {
-    const token = JSON.parse(localStorage.getItem('user')).token;
+    const token = JSON.parse(localStorage.getItem('user')).data.token;
     if (token) {
       config.headers['Authorization'] = 'Bearer ' + token;
+      console.log('config',config);
+
     }
   }
 

@@ -12,6 +12,10 @@ body {
   --background-image: url(https://images.unsplash.com/photo-1475710534222-6165a8b45449?ixlib=rb-0.3.5&s=b4b0451caff94a9c0150b34ecc44d98d&auto=format&fit=crop&w=1350&q=80); 
 }
 
+h1,h2,h3,.custom-font{
+  font-family: 'Kanit', sans-serif;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -19,4 +23,23 @@ code {
 
 .ql-container{
   min-height: 200px;
+}
+
+.blog-content h1{
+  font-weight: 700;
+  font-size: 28px;
+}
+
+.blog-content p{
+  font-size: 16px;
+  line-height: 2;
+}
+
+.blog-content pre{
+  padding: 20px;
+  font-size: 14px;
+  white-space: break-spaces;
+  background-color: rgb(23, 20, 29);
+  color: white;
+  line-height: 2;
 }

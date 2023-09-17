@@ -5,6 +5,8 @@ import BlogPost from './pages/BlogPost';
 import EditPost from './pages/EditPost';
 import RootLayout  from './pages/Root';
 import Login  from './pages/Login';
+import Register from './pages/Register';
+
 import { AuthProvider } from './contexts/AuthContext';
 
 const router = createBrowserRouter([
@@ -22,6 +24,10 @@ const router = createBrowserRouter([
   {
     path: '/login', 
     element: <Login/>,
+  },
+  {
+    path: '/register', 
+    element: <Register/>,
   }
 ])
 
