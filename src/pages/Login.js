@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/api";
 import Card from "../components/UI/Card";
+import { useAuth } from '../contexts/AuthContext'; 
 
 const LoginPage = (props) => {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useAuth();
 
   const [email, setEmail] = useState("");
   const [emailTouched, setEmailTouched] = useState(false);
@@ -55,6 +57,7 @@ const LoginPage = (props) => {
       .post("/auth/login", userData)
       .then((result) => {
         localStorage.setItem("user", JSON.stringify(result));
+        setIsLoggedIn(true);
         navigate("/");
       })
       .catch((error) => {
@@ -71,9 +74,9 @@ const LoginPage = (props) => {
 
   return (
     <Card buttonName={"Login"}>
-      <form className="w-full custom-font" onSubmit={handleSubmit}>
+      <form className="w-full" onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email" className="custom-font">Email</label>
           <input
             id="email"
             type="text"
@@ -90,7 +93,7 @@ const LoginPage = (props) => {
           )}
         </div>
         <div>
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password" className="custom-font">Password</label>
           <input
             id="password"
             type="text"
@@ -106,8 +109,8 @@ const LoginPage = (props) => {
             <p className="text-red-500 text-sm">密碼為必填欄位</p>
           )}
         </div>
-        <button className="mt-8 px-4 py-2 bg-violet-600 hover:bg-violet-700  duration-200 text-white w-full rounded cursor-pointer custom-font">
-          Login
+        <button className="mt-8 px-4 py-2 bg-violet-600 hover:bg-violet-700  duration-200 text-white w-full rounded cursor-pointer">
+          Sign In
         </button>
         <div className="flex justify-center text-sm py-4">
           <p className="text-gray-400">Don't have an account?</p>

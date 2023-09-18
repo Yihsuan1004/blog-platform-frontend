@@ -6,11 +6,17 @@ import Card from "../components/UI/Card";
 const RegisterPage = (props) => {
   const navigate = useNavigate();
 
+  const [fullName, setfullName] = useState("");
+  const [fullNameTouched, setFullNameTouched] = useState(false);
+
+
   const [email, setEmail] = useState("");
   const [emailTouched, setEmailTouched] = useState(false);
 
   const [password, setPassword] = useState("");
   const [passwordTouched, setPasswordTouched] = useState(false);
+
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const emailIsValid = email.trim() !== "";
   const emailInputIsInValid = !emailIsValid && emailTouched;
@@ -22,6 +28,16 @@ const RegisterPage = (props) => {
   if (emailIsValid && passwordIsValid) {
     formIsValid = true;
   }
+
+  const handleFullNameInputBlur = (event) => {
+    setFullNameTouched(true);
+  };
+
+  const handleFullNameInputChange = (event) => {
+    setFullNameTouched(true);
+    setfullName(event.target.value);
+  };
+
 
   const handleEmailInputChange = (event) => {
     setEmailTouched(true);
@@ -37,6 +53,10 @@ const RegisterPage = (props) => {
     setPasswordTouched(true);
   };
 
+  const handleConfirmPasswordInputChange = (event) => {
+    setConfirmPassword(event.target.value);
+  };
+
   const handlePasswordInputBlur = (event) => {
     setPasswordTouched(true);
   };
@@ -49,13 +69,14 @@ const RegisterPage = (props) => {
     const userData = {
       email,
       password,
+      fullName
     };
 
     api
-      .post("/auth/login", userData)
+      .post("/auth/register", userData)
       .then((result) => {
         localStorage.setItem("user", JSON.stringify(result));
-        navigate("/");
+        navigate("/login");
       })
       .catch((error) => {
         console.error(error);
@@ -71,16 +92,16 @@ const RegisterPage = (props) => {
 
   return (
     <Card buttonName={"Sign Up"}>
-      <form className="w-full custom-font" onSubmit={handleSubmit}>
+      <form className="w-full" onSubmit={handleSubmit}>
         <div className="mb-2">
-          <label htmlFor="email">Full Name</label>
+          <label htmlFor="fullName" className="custom-font">Full Name</label>
           <input
-            id="email"
+            id="fullName"
             type="text"
-            placeholder="請輸入Email"
-            value={email}
-            onBlur={handleEmailInputBlur}
-            onChange={handleEmailInputChange}
+            placeholder="Your FullName "
+            value={fullName}
+            onBlur={handleFullNameInputBlur}
+            onChange={handleFullNameInputChange}
             className={`mt-1 block w-full px-3 py-2 bg-white border 
                                 rounded-md text-sm shadow-sm placeholder-slate-400
                                 focus:outline-none focus:ring-1  ${emailInputClasses}`}
@@ -90,11 +111,11 @@ const RegisterPage = (props) => {
           )}
         </div>
         <div className="mb-2">
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email" className="custom-font">Email</label>
           <input
             id="email"
             type="text"
-            placeholder="請輸入Email"
+            placeholder="Email Address"
             value={email}
             onBlur={handleEmailInputBlur}
             onChange={handleEmailInputChange}
@@ -108,11 +129,11 @@ const RegisterPage = (props) => {
         </div>
 
         <div className="mb-2">
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password" className="custom-font">Password</label>
           <input
             id="password"
             type="text"
-            placeholder="請輸入密碼"
+            placeholder="Password"
             value={password}
             onBlur={handlePasswordInputBlur}
             onChange={handlePasswordInputChange}
@@ -126,14 +147,13 @@ const RegisterPage = (props) => {
         </div>
 
         <div>
-          <label htmlFor="password">Confirm Password</label>
+          <label htmlFor="confirmPassword" className="custom-font">Confirm Password</label>
           <input
-            id="password"
+            id="confirmPassword"
             type="text"
-            placeholder="請輸入密碼"
-            value={password}
-            onBlur={handlePasswordInputBlur}
-            onChange={handlePasswordInputChange}
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordInputChange}
             className={`mt-1 block w-full px-3 py-2 bg-white border 
                                 rounded-md text-sm shadow-sm placeholder-slate-400
                                 focus:outline-none focus:ring-1  ${passwordInputClasses}`}
@@ -142,7 +162,7 @@ const RegisterPage = (props) => {
             <p className="text-red-500 text-sm">Password is required.</p>
           )}
         </div>
-        <button className="mt-8 px-4 py-2 bg-violet-600 hover:bg-violet-700  duration-200 text-white w-full rounded cursor-pointer custom-font">
+        <button className="mt-8 px-4 py-2 bg-violet-600 hover:bg-violet-700  duration-200 text-white w-full rounded cursor-pointer">
           Sign Up
         </button>
         <div className="flex text-sm py-4 justify-center">
