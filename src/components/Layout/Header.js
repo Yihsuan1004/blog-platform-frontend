@@ -19,9 +19,15 @@ const Header = (props) => {
           </div>
         </Link>
         <div className="text-gray-200">
+        <Link to="/posts">
           <button className="px-8 py-2 hover:text-white">Posts</button>
+        </Link>
+        <Link to="/tags">
           <button className="px-8 py-2 hover:text-white">Tags</button>
+        </Link> 
+        <Link to="/login">
           <button className="px-8 py-2 hover:text-white">Contact</button>
+        </Link>
         </div>
 
         <div className="flex items-center">

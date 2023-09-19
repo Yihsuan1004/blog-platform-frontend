@@ -12,8 +12,6 @@ const BlogPost = props =>{
         api.get('/posts/64fdaf28e92f5eb09ba2df7b')
         .then((result) => {
             setData(result.data.content);
-            console.log(result);
-
         })
         .catch((error) => {
             console.error(error);
@@ -45,28 +43,6 @@ const BlogPost = props =>{
             {<div dangerouslySetInnerHTML={{ __html: data }} />}
         </div>
 
-        {/* <p className="text-xl">
-        The micro frontends architecture, being inspired by microservices, is a component-driven approach to building the frontend where each component or feature of the frontend is a self-contained, independently deployable module, worked upon by independent dev teams.
-
-This architecture enables developers to build and update individual components separately without affecting other components or features in the frontend, making the application more scalable, modular, and flexible and at the same time improving collaboration among developers. The micro frontends architecture is a perfect method for breaking down large monolithic applications into nimble, independent units.
-
-
-        </p>
-        <p className='text-xl'>
-        The micro frontends architecture, being inspired by microservices, is a component-driven approach to building the frontend where each component or feature of the frontend is a self-contained, independently deployable module, worked upon by independent dev teams.
-
-This architecture enables developers to build and update individual components separately without affecting other components or features in the frontend, making the application more scalable, modular, and flexible and at the same time improving collaboration among developers. The micro frontends architecture is a perfect method for breaking down large monolithic applications into nimble, independent units.
-
-
-        </p>
-        <p className='text-xl'>
-        The micro frontends architecture, being inspired by microservices, is a component-driven approach to building the frontend where each component or feature of the frontend is a self-contained, independently deployable module, worked upon by independent dev teams.
-
-This architecture enables developers to build and update individual components separately without affecting other components or features in the frontend, making the application more scalable, modular, and flexible and at the same time improving collaboration among developers. The micro frontends architecture is a perfect method for breaking down large monolithic applications into nimble, independent units.
-
-
-        </p> */}
-        <div className='h-80'></div>
     </div>
 }
 

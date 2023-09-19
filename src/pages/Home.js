@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import PostItem from '../components/Posts/PostItem';
+import HomeItem from '../components/Posts/HomeItem';
 import { Link } from 'react-router-dom';
 import BlogCover from '../assets/blog-cover.jpg';
 
@@ -21,22 +21,22 @@ const HomePage = props =>{
             <h2 className="text-violet-600 text-3xl font-semibold">Latest Posts</h2>
             <div className="grid gap-8 grid-cols-3 grid-rows-2">
                 <Link to="/blog-post/1">
-                    <PostItem />
+                    <HomeItem />
                 </Link>
                 <Link to="/blog-post/2">
-                    <PostItem />
+                    <HomeItem />
                 </Link>
                 <Link to="/blog-post/3">
-                    <PostItem />
+                    <HomeItem />
                 </Link>
                 <Link to="/blog-post/1">
-                    <PostItem />
+                    <HomeItem />
                 </Link>
                 <Link to="/blog-post/2">
-                    <PostItem />
+                    <HomeItem />
                 </Link>
                 <Link to="/blog-post/3">
-                    <PostItem />
+                    <HomeItem />
                 </Link>
             </div>
         </div>
