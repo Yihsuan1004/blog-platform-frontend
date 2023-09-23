@@ -43,3 +43,12 @@ code {
   color: white;
   line-height: 2;
 }
+
+.rti--container:has(.border-red),.rti--container:has(.border-red):focus {
+  border: 1px solid red;
+}
+
+
+.rti--container > .rti--input{
+  font-size: 14px;
+}

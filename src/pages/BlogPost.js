@@ -9,7 +9,7 @@ const BlogPost = props =>{
     const [data, setData] = useState({});
 
     useEffect(() => {
-        api.get('/posts/64fdaf28e92f5eb09ba2df7b')
+        api.get('/posts/650f10d474fca58ae482c0a8')
         .then((result) => {
             setData(result.data.content);
         })

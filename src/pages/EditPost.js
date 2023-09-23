@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo  } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import ImageUploader from "quill-image-uploader";
 import 'react-quill/dist/quill.snow.css';
@@ -9,40 +9,38 @@ Quill.register("modules/imageUploader", ImageUploader);
 
 const EditPost = (props) => {
 
-    const [title, setTitle] = useState("");
-    const [titleTouched, setTitleTouched] = useState(false);
+  const [title, setTitle] = useState("");
+  const [titleTouched, setTitleTouched] = useState(false);
 
-    const [tags, setTags] = useState([]);
-    const [tagsTouched, setTagsTouched] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [tagsTouched, setTagsTouched] = useState(false);
 
-    const [content, setContent] = useState("");
-    const [contentTouched, setContentTouched] = useState(false);
+  const [content, setContent] = useState("");
+  const [contentTouched, setContentTouched] = useState(false);
 
 
-    const titleIsValid = title.trim() !== '';
-    const titleInputIsInValid = !titleIsValid && titleTouched;
+  const titleIsValid = title.trim() !== '';
+  const titleInputIsInValid = !titleIsValid && titleTouched;
 
-    const tagsIsValid = tags.length > 0 ;
-    console.log(tagsIsValid);
-    const tagsInputIsInValid = !tagsIsValid && tagsTouched;
+  const tagsIsValid = tags.length > 0 ;
+  const tagsInputIsInValid = !tagsIsValid && tagsTouched;
 
-    const contentIsValid = content.trim() !== '' ;
-    const contentInputIsInValid = !contentIsValid && contentTouched;
-    
+
      
-    const handleTitleInputChange  = event =>{
-      setTitleTouched(true);
-      setTitle(event.target.value);
+  
+  const handleTitleInputChange  = event =>{
+    setTitleTouched(true);
+    setTitle(event.target.value);
   }
 
   const handleTitleInputBlur  = event =>{
-      setTitleTouched(true);
+    setTitleTouched(true);
   }
 
   const handleTagsInputChange  = event =>{
-      console.log(event);
-      setTags(event.target.value);
-      setTagsTouched(true);
+    console.log(event);
+    setTags(event.target.value);
+    setTagsTouched(true);
   }
 
   const handleTagsInputBlur  = () =>{
@@ -51,92 +49,85 @@ const EditPost = (props) => {
   }
 
   //onChange事件可以拿到 (content, delta, source, editor)
-  const handleContentChange = (value,delta) => {
+  const handleContentChange = (value, delta) => {
     console.log("rich text", value);
     setContent(value);
+  };
+
+
+  /**  
+   * Called when the editor loses focus. 
+   * It will receive the selection range it had right before losing focus.*/
+  const handleContentBlur = (previousRange, source, editor) => {
     setContentTouched(true);
   };
 
-  const handleContentBlur  = event =>{
-    setContentTouched(true);
+
+  const isContentValid = (content) =>{
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(content, 'text/html');
+    const textContent = doc.body.textContent || "";
+    return textContent.trim().length > 0; // 檢查是否有非空白字符
   }
 
+  const contentIsValid = isContentValid(content) ;
+  const contenttIsInValid = !contentIsValid && contentTouched;
 
-    const modules = {
-        toolbar: [
-            [{ header: [1, 2, 3, false] }],
-            [{ font: [] }],
-            [
-                "bold",
-                "italic",
-                "underline",
-                "strike",
-                "blockquote",
-                "code-block",
-                "link",
-                "header",
-                "font",
-                "size",
-                "list",
-                "bullet",
-                "indent",
-                "link",
-                "image",
-                "color",
-                { align: [] },
-            ],
+  const modules = useMemo(() => ({
+    toolbar: [
+        [{ header: [1, 2, 3, false] }],
+        [{ font: [] }],
+        [
+            "bold",
+            "italic",
+            "underline",
+            "strike",
+            "blockquote",
+            "code-block",
+            "link",
+            "image",
+            { align: [] },
         ],
-        // imageUploader: {
-        //   upload: (file) => {
-        //     return new Promise((resolve, reject) => {
-        //       const formData = new FormData();
-        //       formData.append("image", file);
-    
-        //       fetch(
-        //         "http://localhost:5200/api/images/upload",
-        //         {
-        //           method: "POST",
-        //           body: formData
-        //         }
-        //       )
-        //         .then((response) => response.json())
-        //         .then((result) => {
-        //           console.log(result);
-        //           resolve(result.data.url);
-        //         })
-        //         .catch((error) => {
-        //           reject("Upload failed");
-        //           console.error("Error:", error);
-        //         });
-        //     });
-        //   }
-        // }
-    };
-
-  
-
-    const handleCreate = () =>{
-      const post = {
-        title: title,
-        tags: tags,
-        content: content
+    ],
+    imageUploader: {
+      upload: (file) => {
+        return new Promise((resolve, reject) => {
+          const formData = new FormData();
+          formData.append("image", file);
+          api.post("/images/upload", formData)
+            .then((result) => {
+              console.log(result.data.data.url);
+              resolve(result.data.data.url);
+            })
+            .catch((error) => {
+              reject("Upload failed");
+              console.error("Error:", error);
+            });
+        });
       }
-
-      console.log(post);
-
-      api.post('/posts',post).then(response => {
-        console.log(response.data);
-      }).catch((error) => {
-        console.error(error);
-      });
     }
+  }), []); 
+
+     
+  const handleCreate = () =>{
+    const post = {
+      title: title,
+      tags: tags,
+      content: content
+    }
+
+    api.post('/posts',post).then(response => {
+      console.log(response.data);
+    }).catch((error) => {
+      console.error(error);
+    });
+  }
 
 
     
   const titleInputClasses = titleInputIsInValid ? 'border-red-300 focus:ring-red-500' : 'border-slate-300 focus:ring-sky-500'  ;
-  const tagsInputClasses = tagsInputIsInValid ? 'border-red-300 focus:ring-red-500' : 'border-slate-300 focus:ring-sky-500';
-  console.log(tagsInputClasses);
-
+  const tagsInputClasses = tagsInputIsInValid ? 'border-red' : 'border-slate';
+  const contentClasses = contenttIsInValid ? 'border border-red-300 focus:border-red-500' : '';
   return (
     <div className="w-screen py-16">
       <div className="w-[720px] mx-auto py-20">
@@ -159,33 +150,33 @@ const EditPost = (props) => {
           <h3 className="text-2xl font-bold">文章分類</h3>
           <TagsInput
             value={tags}
-            className={tagsInputClasses}
+            classNames={{ input: tagsInputClasses}}
             onChange={setTags}
             onBlur={handleTagsInputBlur}
-            name="fruits"
+            name="tags"
             placeHolder="輸入文章分類"
           />
+          {!tagsInputIsInValid || <p className="text-red-500 text-sm">至少輸入一個tag</p>}
         </div>
         <div className="mb-8">
           <h3 className="text-2xl font-bold">文章內容</h3>
-          <div className="quillContainer">
             <ReactQuill
                 theme="snow"
                 placeholder="Enter your rich text edtior"
                 modules={modules}
                 value={content}
-                onChange={(e) =>handleContentChange}
+                className={contentClasses}
                 onBlur={handleContentBlur}
+                onChange={handleContentChange}
             />
-          </div>
+          {!contenttIsInValid || <p className="text-red-500 text-sm">請輸入有效的內容</p>}
         </div>
         <div className="text-right">
-          <button className="bg-sky-700 text-white px-2 py-1 rounded" 
+          <button className="bg-sky-700 text-white px-2 py-1 rounded"
                   onClick={handleCreate}>
                   發布
           </button>
         </div>
-        {/* {<div dangerouslySetInnerHTML={{ __html: value }} />} */}
       </div>
     </div>
   );
