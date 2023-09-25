@@ -118,6 +118,7 @@ const EditPost = (props) => {
 
     api.post('/posts',post).then(response => {
       console.log(response.data);
+      
     }).catch((error) => {
       console.error(error);
     });
@@ -125,9 +126,9 @@ const EditPost = (props) => {
 
 
     
-  const titleInputClasses = titleInputIsInValid ? 'border-red-300 focus:ring-red-500' : 'border-slate-300 focus:ring-sky-500'  ;
+  const titleInputClasses = titleInputIsInValid ? 'border-red-500 focus:ring-red-500' : 'border-slate-300 focus:ring-sky-500'  ;
   const tagsInputClasses = tagsInputIsInValid ? 'border-red' : 'border-slate';
-  const contentClasses = contenttIsInValid ? 'border border-red-300 focus:border-red-500' : '';
+  const contentClasses = contenttIsInValid ? 'border border-red-500 focus:border-red-500' : '';
   return (
     <div className="w-screen py-16">
       <div className="w-[720px] mx-auto py-20">

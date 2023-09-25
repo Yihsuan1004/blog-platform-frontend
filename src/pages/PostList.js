@@ -3,12 +3,13 @@ import api from '../api/api';
 import PostItem from '../components/Posts/PostItem';
 
 const PostList = props =>{
-    const [data, setData] = useState({});
+    const [postList, setPostList] = useState([]);
 
     useEffect(() => {
-        api.get('/posts/64fdaf28e92f5eb09ba2df7b')
+        api.get('/posts')
         .then((result) => {
-            setData(result.data.content);
+            console.log(result.data);
+            setPostList(result.data);
         })
         .catch((error) => {
             console.error(error);
@@ -32,8 +33,7 @@ const PostList = props =>{
         </div>
 
         <div className="py-8"> 
-            <PostItem/>
-            <PostItem />
+            { postList.map(post => <PostItem key={post._id} post={post}/>)}
         </div>
 
     </div>
