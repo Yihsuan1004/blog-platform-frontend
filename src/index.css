@@ -44,10 +44,12 @@ code {
   line-height: 2;
 }
 
-.rti--container:has(.border-red),.rti--container:has(.border-red):focus {
+.rti--container:has(.border-red),.rti--container:has(.border-red:focus) {
   border: 1px solid red;
 }
-
+.rti--container:has(.border-red:focus) {
+  box-shadow: rgb(238, 121, 121) 0 0 0 1px;
+}
 
 .rti--container > .rti--input{
   font-size: 14px;
