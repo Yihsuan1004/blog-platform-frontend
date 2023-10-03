@@ -46,7 +46,7 @@ const PostItem = ({post}) =>{
          </div>
          <div className="flex items-center text-sm">
            {tags.map((tag,index) => (
-            <Tag name={tag} key={index} classes={"mr-2"}></Tag>
+            <Tag name={tag} key={index} classes={"mr-2"} />
            ))}
          </div>
        </div>
