@@ -1,31 +1,34 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import api from "../api/api";
 import Card from "../components/UI/Card";
-import { useAuth } from "../contexts/AuthContext";
-import useInput from "../hooks/use-input";
+import useInput from "../hooks/useInput";
 
 const LoginPage = (props) => {
-  const navigate = useNavigate();
-
-  const emailFormatValidate = (value) =>{
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    return emailRegex.test(value);
-  }
 
 
-  const { setIsLoggedIn } = useAuth();
- 
   const [errorMsg,setErrorMsg] = useState('');
+
+  const validateEmail = (value) => {
+    if (value.trim() === '') {
+      return { isValid: false, errorMessage: 'Email is required.' };
+    }
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    if (!emailRegex.test(value)) {
+      return { isValid: false, errorMessage: 'Please enter a valid email.' };
+    }
+    return { isValid: true, errorMessage: '' };
+  };
+
 
   const {
     value: email,
     isValid: emailIsValid,
+    errorMessage: emailErrorMessage,
     hasError: emailInputHasError,
     valueChangeHandler: emailChangeHandler,
     inputBlurHandler: emailBlurHandler,
-  } = useInput(emailFormatValidate);
-
+  } = useInput(validateEmail);
 
   const {
     value: password,
@@ -57,8 +60,6 @@ const LoginPage = (props) => {
       .post("/auth/login", userData)
       .then((result) => {
         localStorage.setItem("user", JSON.stringify(result));
-        setIsLoggedIn(true);
-        navigate("/");
       })
       .catch((error) => {
         setErrorMsg('Login failed. Your email or password is incorrect.')
@@ -83,7 +84,7 @@ const LoginPage = (props) => {
           <input
             id="email"
             type="text"
-            placeholder="請輸入Email"
+            placeholder="Email Address"
             value={email}
             onBlur={emailBlurHandler}
             onChange={emailChangeHandler}
@@ -91,8 +92,8 @@ const LoginPage = (props) => {
                                     rounded-md text-sm shadow-sm placeholder-slate-400
                                     focus:outline-none focus:ring-1  ${emailInputClasses}`}
           />
-          {!emailInputHasError || (
-            <p className="text-red-500 text-sm">Email is required</p>
+          { emailInputHasError && (
+            <p className="text-red-500 text-sm">{emailErrorMessage}</p>
           )}
         </div>
         <div>
@@ -102,7 +103,7 @@ const LoginPage = (props) => {
           <input
             id="password"
             type="text"
-            placeholder="請輸入密碼"
+            placeholder="Password"
             value={password}
             onBlur={passwordBlurHandler}
             onChange={passwordChangeHandler}
@@ -110,7 +111,7 @@ const LoginPage = (props) => {
                                     rounded-md text-sm shadow-sm placeholder-slate-400
                                     focus:outline-none focus:ring-1  ${passwordInputClasses}`}
           />
-          {!passwordInputHasError || (
+          { passwordInputHasError && (
             <p className="text-red-500 text-sm">Password is required</p>
           )}
         </div>
