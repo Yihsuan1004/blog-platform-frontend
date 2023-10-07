@@ -59,7 +59,7 @@ const LoginPage = (props) => {
     api
       .post("/auth/login", userData)
       .then((result) => {
-        localStorage.setItem("user", JSON.stringify(result));
+        console.log(result);
       })
       .catch((error) => {
         setErrorMsg('Login failed. Your email or password is incorrect.')
