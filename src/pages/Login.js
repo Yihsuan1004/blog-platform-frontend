@@ -6,7 +6,6 @@ import useInput from "../hooks/useInput";
 
 const LoginPage = (props) => {
 
-
   const [errorMsg,setErrorMsg] = useState('');
 
   const validateEmail = (value) => {
@@ -59,7 +58,7 @@ const LoginPage = (props) => {
     api
       .post("/auth/login", userData)
       .then((result) => {
-        console.log(result);
+        localStorage.setItem("user", JSON.stringify(result));
       })
       .catch((error) => {
         setErrorMsg('Login failed. Your email or password is incorrect.')
