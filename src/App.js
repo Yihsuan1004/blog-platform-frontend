@@ -1,12 +1,20 @@
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+
 import Login  from './pages/Login';
 import Register from './pages/Register';
+import RootLayout from './pages/Root';
+import HomePage from './pages/Home';
 
 const router = createBrowserRouter([
   {
     path: '/', 
-    element: <Login/>
+    element: <RootLayout/>,
+    children:[
+      { path: '/', element: <HomePage />},
+
+    ]
   },
   {
     path: '/login', 
@@ -20,7 +28,9 @@ const router = createBrowserRouter([
 
 const App = () => {
   return (
+    <AuthProvider>
       <RouterProvider router={router}/>
+    </AuthProvider>
   );
 }
 
