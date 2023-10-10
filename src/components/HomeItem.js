@@ -1,5 +1,5 @@
-import postCover from '../../assets/computer.jpg';
-import avatar from '../../assets/avatar.jpg';
+import postCover from '../assets/computer.jpg';
+import avatar from '../assets/avatar.jpg';
 
 const HomeItem = props =>{
    return <div className="mx-auto py-8 w-auto">

@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import HomeItem from '../components/UI/HomeItem';
+import HomeItem from '../components/HomeItem';
 import BlogCover from '../assets/blog-cover.jpg';
 
 const HomePage = props =>{

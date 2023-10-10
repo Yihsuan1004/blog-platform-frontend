@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/api";
-import Card from "../components/UI/Card";
+import Card from "../components/Card";
 import useInput from "../hooks/useInput";
 
 const LoginPage = (props) => {
