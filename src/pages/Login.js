@@ -1,10 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import api from "../api/api";
 import Card from "../components/Card";
 import useInput from "../hooks/useInput";
 
 const LoginPage = (props) => {
+  const navigate = useNavigate();
+  const { setIsLoggedIn } = useAuth();
 
   const [errorMsg,setErrorMsg] = useState('');
 
@@ -18,6 +21,14 @@ const LoginPage = (props) => {
     }
     return { isValid: true, errorMessage: '' };
   };
+
+  const validatePassword = (value) => {
+    if (value.trim() === '') {
+      return { isValid: false, errorMessage: 'Password is required.' };
+    }
+    return { isValid: true, errorMessage: '' };
+  };
+
 
 
   const {
@@ -35,7 +46,7 @@ const LoginPage = (props) => {
     hasError: passwordInputHasError,
     valueChangeHandler: passwordChangeHandler,
     inputBlurHandler: passwordBlurHandler,
-  } = useInput(value => value.trim() !== '');
+  } = useInput(validatePassword);
 
 
   let formIsValid = false;
@@ -59,6 +70,8 @@ const LoginPage = (props) => {
       .post("/auth/login", userData)
       .then((result) => {
         localStorage.setItem("user", JSON.stringify(result));
+        setIsLoggedIn(true);
+        navigate("/");
       })
       .catch((error) => {
         setErrorMsg('Login failed. Your email or password is incorrect.')

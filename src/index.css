@@ -54,3 +54,11 @@ code {
 .rti--container > .rti--input{
   font-size: 14px;
 }
+
+.text-ellipsis{
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}

@@ -8,6 +8,7 @@ import RootLayout from './pages/Root';
 import HomePage from './pages/Home';
 import PostList from './pages/PostList';
 import TagList  from './pages/TagList';
+import EditPost from './pages/EditPost';
 
 const router = createBrowserRouter([
   {
@@ -16,7 +17,8 @@ const router = createBrowserRouter([
     children:[
       { path: '/', element: <HomePage />},
       { path: '/posts', element: <PostList />},
-      { path: '/tags', element: <TagList />}
+      { path: '/tags', element: <TagList />},
+      { path: '/edit-post/new', element: <EditPost />},
     ]
   },
   {
