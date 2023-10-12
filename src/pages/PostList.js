@@ -17,6 +17,7 @@ const PostList = props =>{
             setPostList(result.data);
         })
         .catch((error) => {
+            alert('An error occurred:',error.message);
             console.error(error);
         });
     }
@@ -31,8 +32,8 @@ const PostList = props =>{
         const url = `/posts?title=${keyword}`;
         api.get(url).then(response => {
             setPostList(response.data);
-            console.log(response.data);
         }).catch((error) => {
+            alert('An error occurred:',error.message);
             console.error(error);
         });      
     }
@@ -65,7 +66,7 @@ const PostList = props =>{
             </p>
         </div>
         <div className="py-8"> 
-            { postList.map(post => <PostItem key={post._id} post={post}/>)}
+            { postList.map(post => <PostItem key={post._id} post={post} id={post._id}/>)}
         </div>
 
     </div>

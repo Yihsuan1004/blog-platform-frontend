@@ -1,10 +1,11 @@
-import React, { useState, useMemo  } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useMemo,useEffect } from "react";
+import { useNavigate,useLocation } from "react-router-dom";
 import { TagsInput } from "react-tag-input-component";
 import ReactQuill from "react-quill";
 import 'react-quill/dist/quill.snow.css';
 import api from '../api/api';
 import useInput from "../hooks/useInput";
+import { AiOutlineFileAdd} from "react-icons/ai";
 
 
 const EditPost = (props) => {
@@ -31,6 +32,7 @@ const EditPost = (props) => {
     hasError: titleInputHasError,
     valueChangeHandler: titleChangeHandler,
     inputBlurHandler: titleBlurHandler,
+    setEnteredValue: setTitle
   } = useInput(validateRequired);
 
 
@@ -41,6 +43,8 @@ const EditPost = (props) => {
   const [tags, setTags] = useState([]);
   const [tagsTouched, setTagsTouched] = useState(false);
 
+  const [imageUrl, setImageUrl] = useState('');
+
   
   const [content, setContent] = useState("");
   const [contentTouched, setContentTouched] = useState(false);
@@ -50,6 +54,22 @@ const EditPost = (props) => {
 
   const contentIsValid = validateContent(content) ;
   const contenttIsInValid = !contentIsValid && contentTouched;
+
+  //取得從文章內容路由傳進來的資料
+  const location = useLocation();
+
+  const passedData = location.state;
+
+
+  useEffect(() => {
+    //如果有資料，則將資料顯示在畫面上(表示正在進行編輯)
+    if (passedData) {
+        setTitle(passedData.title || '');
+        setContent(passedData.content || '');
+        setTags(passedData.tags || []);
+        setImageUrl(passedData.coverImage || '');
+    }
+}, [passedData]);
 
 
   
@@ -71,9 +91,6 @@ const EditPost = (props) => {
   };
 
 
-  /**  
-   * Called when the editor loses focus. 
-   * It will receive the selection range it had right before losing focus.*/
   const handleContentBlur = (previousRange, source, editor) => {
     setContentTouched(true);
   };
@@ -98,8 +115,18 @@ const EditPost = (props) => {
   }), []); 
 
   const onFileChange = (e) =>{
-    console.log(e.target.files[0]);
-    setFile(e.target.files[0]);
+    const selectedFile = e.target.files[0];
+    console.log(selectedFile);
+    setFile(selectedFile);
+
+    // 如果使用者選擇了圖片，則生成一個預覽URL並設定它
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        setImageUrl(event.target.result);
+      }
+      reader.readAsDataURL(selectedFile);
+    }
   }
 
   const uploadImage = async () => {
@@ -126,10 +153,27 @@ const EditPost = (props) => {
         content,
         coverImage: imageUrl,
         authorId: authorId,
-        tags: tags,
+        tags,
       };
 
       await api.post('/posts', postData);
+
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  const updatePost = async (imageUrl) => {
+    try {
+      const postData = {
+        title,
+        content,
+        coverImage: imageUrl,
+        authorId: authorId,
+        tags,
+      };
+
+      await api.put(`/posts/${passedData._id}`, postData);
 
     } catch (error) {
       throw error;
@@ -146,8 +190,13 @@ const EditPost = (props) => {
     setLoading(true);
     try {
       const imageUrl = await uploadImage();
-      await createPost(imageUrl);
-      alert('Post created successfully!');
+      if(passedData){
+        await updatePost(imageUrl);
+        alert('Post update successfully!');
+      } else {
+        await createPost(imageUrl);
+        alert('Post created successfully!');
+      }
       navigate("/");
     } catch (error) {
       console.error("An error occurred:", error);
@@ -195,11 +244,21 @@ const EditPost = (props) => {
         </div>
         <div className="mb-8">
           <h3 className="text-2xl mb-1">Cover Image</h3>
-          <input 
-            type="file" 
-            accept="image/jpeg, image/png" 
-            onChange={onFileChange} 
-          />
+          <div>
+            { imageUrl && <img className="mb-4" src={imageUrl} alt="cover"/>}
+            <label className="text-violet-600 flex items-center cursor-pointer w-[130px] py-2 px-4 rounded border border-violet-600 hover:border-violet-800 hover:text-violet-800">
+                <AiOutlineFileAdd/>
+                <span>Select File</span>
+              <input 
+                className="hidden"
+                type="file" 
+                accept="image/jpeg, image/png" 
+                onChange={onFileChange} 
+              />
+            </label>
+          </div>
+          
+          
         </div>
         <div className="mb-8">
           <h3 className="text-2xl mb-1">Content</h3>
@@ -215,8 +274,8 @@ const EditPost = (props) => {
           {contenttIsInValid && <p className="text-red-500 text-sm">Please enter valid content</p>}
         </div>
         <div className="text-right">
-          <button className="bg-violet-600 text-white px-6 py-2 rounded disabled:opacity-50"  type="submit" disabled={loading || !formIsValid}>
-            {loading ? 'Uploading...' : 'Submit'}
+          <button type="submit" className="bg-violet-600 text-white px-6 py-2 rounded disabled:opacity-50" disabled={loading || !formIsValid}>
+            {loading ? 'Uploading...' : passedData ? 'Update' : 'Submit'}
           </button>
         </div>
       </form>

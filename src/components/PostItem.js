@@ -1,7 +1,8 @@
 import Tag from './Tag';
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
-const PostItem = ({post}) =>{
+const PostItem = ({post ,id}) =>{
   const { content, title, tags , coverImage , author ,createdDate} = post;
 
   const [summary, setSummary] =  useState('');
@@ -18,6 +19,7 @@ const PostItem = ({post}) =>{
   },[])
 
    return (
+    <Link to={`/posts/${id}`}>
      <div className="flex items-center justify-between w-full mb-8">
        <div>
          <div className="flex items-center mt-2">
@@ -49,6 +51,7 @@ const PostItem = ({post}) =>{
         }
        </div>
      </div>
+     </Link>
    );
 }
 

@@ -6,6 +6,7 @@ import Login  from './pages/Login';
 import Register from './pages/Register';
 import RootLayout from './pages/Root';
 import HomePage from './pages/Home';
+import BlogPost from './pages/BlogPost';
 import PostList from './pages/PostList';
 import TagList  from './pages/TagList';
 import EditPost from './pages/EditPost';
@@ -17,8 +18,10 @@ const router = createBrowserRouter([
     children:[
       { path: '/', element: <HomePage />},
       { path: '/posts', element: <PostList />},
+      { path: '/posts/:postId', element: <BlogPost />},
       { path: '/tags', element: <TagList />},
       { path: '/edit-post/new', element: <EditPost />},
+      { path: '/edit-post/:postId', element: <EditPost />},
     ]
   },
   {

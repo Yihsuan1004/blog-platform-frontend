@@ -6,6 +6,14 @@ import useInput from "../hooks/useInput";
 const RegisterPage = (props) => {
   const navigate = useNavigate();
 
+  const validateFullName= (value) => {
+    if (value.trim() === '') {
+      return { isValid: false };
+    }
+    return { isValid: true };
+  };
+
+
   //Email validation
   const validateEmail = (value) => {
     if (value.trim() === '') {
@@ -50,7 +58,7 @@ const RegisterPage = (props) => {
     hasError: fullNameInputHasError,
     valueChangeHandler: fullNameChangeHandler,
     inputBlurHandler: fullNameBlurHandler,
-  } = useInput(value => value.trim() !== '');
+  } = useInput(validateFullName);
 
   const {
     value: email,
@@ -101,6 +109,7 @@ const RegisterPage = (props) => {
     api
       .post("/auth/register", userData)
       .then((result) => {
+        alert(result);
         localStorage.setItem("user", JSON.stringify(result));
         navigate("/login");
       })

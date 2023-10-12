@@ -25,6 +25,8 @@ code {
   min-height: 200px;
 }
 
+
+/* 設定blog文章顯示的對應樣式 */
 .blog-content h1{
   font-weight: 700;
   font-size: 28px;
@@ -44,16 +46,17 @@ code {
   line-height: 2;
 }
 
+/* react tags input 錯誤樣式處理 */
 .rti--container:has(.border-red),.rti--container:has(.border-red:focus) {
   border: 1px solid red;
 }
 .rti--container:has(.border-red:focus) {
   box-shadow: rgb(238, 121, 121) 0 0 0 1px;
 }
-
 .rti--container > .rti--input{
   font-size: 14px;
 }
+
 
 .text-ellipsis{
   display: -webkit-box;
@@ -62,3 +65,4 @@ code {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+
