@@ -70,7 +70,6 @@ const BlogPost = props =>{
                     <p className="text-gray-400 text-sm tracking-wider">{data.createdDate}</p> 
                 </div>
             </div>
-            {/* 當文章作者和當前使用者一樣時，才會顯示文章編輯和刪除的功能 */}
            { currentUserId ===  data.author._id &&
             <div className="flex items-center">
                 <Link to={`/edit-post/${postId}`} state={data}>
