@@ -1,7 +1,8 @@
 import axios from 'axios';
 
+
 const api = axios.create({
-  baseURL: 'http://localhost:5200/api',
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 const EXCLUDED_URLS = ['/auth/login', '/auth/register'];
@@ -22,6 +23,19 @@ api.interceptors.request.use((config) => {
   return config;
   
 }, (error) => {
+  return Promise.reject(error);
+});
+
+// 使用響應攔截器(interceptor)來處理 401 錯誤
+api.interceptors.response.use((response) => {
+  return response;
+}, (error) => {
+  if (error.response && error.response.status === 401) {
+    localStorage.removeItem('user');
+    alert(error.response.message);
+    // 重新導向到登入頁面
+    window.location.href = '/login';
+  }
   return Promise.reject(error);
 });
 

@@ -43,6 +43,9 @@ export default Header;
 
 
 const LoggedInComponents = () => {
+  const currentUserId = JSON.parse(localStorage.getItem("user")).data.id;
+
+  
   const navigate = useNavigate();
 
   const handleSignOut = () => {
@@ -76,20 +79,17 @@ const LoggedInComponents = () => {
         >
           <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-white shadow-lg focus:outline-none flex flex-col rounded">
             <Menu.Item as={Fragment}>
-              <a
-                href="/account-settings"
-                className="p-2 text-gray-800 bg-white hover:bg-neutral-100 text-left"
-              >
-                Account settings
-              </a>
+              <Link to={"profile/" + currentUserId}>
+                <p className="px-2 py-3">Account settings</p>
+              </Link>
             </Menu.Item>
             <Menu.Item as={Fragment}>
-              <button
-                className="p-2 text-gray-800 bg-white hover:bg-neutral-100 text-left"
-                onClick={handleSignOut}
-              >
-                Sign out
-              </button>
+                <button
+                  className="p-2 text-gray-800 bg-white hover:bg-neutral-100 text-left"
+                  onClick={handleSignOut}
+                >
+                  Sign out
+                </button>
             </Menu.Item>
           </Menu.Items>
         </Transition>

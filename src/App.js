@@ -10,6 +10,8 @@ import BlogPost from './pages/BlogPost';
 import PostList from './pages/PostList';
 import TagList  from './pages/TagList';
 import EditPost from './pages/EditPost';
+import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +20,8 @@ const router = createBrowserRouter([
     children:[
       { path: '/', element: <HomePage />},
       { path: '/posts', element: <PostList />},
+      { path: '/profile/:userId', element: <Profile />},
+      { path: '/profile/edit', element: <EditProfile />},
       { path: '/posts/:postId', element: <BlogPost />},
       { path: '/tags', element: <TagList />},
       { path: '/edit-post/new', element: <EditPost />},

@@ -66,7 +66,7 @@ const PostList = props =>{
             </p>
         </div>
         <div className="py-8"> 
-            { postList.map(post => <PostItem key={post._id} post={post} id={post._id}/>)}
+            { postList.map(post => <PostItem key={post._id} post={post} id={post._id} isShowAuthor={true}/>)}
         </div>
 
     </div>
