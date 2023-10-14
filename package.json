@@ -1,5 +1,5 @@
 {
-  "name": "yih-blog-frontend",
+  "name": "blog-platform-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -19,8 +19,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "env-cmd -f .env.development react-scripts start",
+    "build:production": "env-cmd -f .env.production react-scripts build",
+    "build": "env-cmd -f .env.development react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "env-cmd": "^10.1.0",
     "tailwindcss": "^3.3.3"
   }
 }
