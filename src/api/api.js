@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5200/api',
-});
+  baseURL: `${process.env.REACT_APP_API_URL}/api`
+})
 
 const EXCLUDED_URLS = ['/auth/login', '/auth/register'];
 
