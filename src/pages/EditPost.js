@@ -43,7 +43,7 @@ const EditPost = (props) => {
   const [tags, setTags] = useState([]);
   const [tagsTouched, setTagsTouched] = useState(false);
 
-  const [imageUrl, setImageUrl] = useState('');
+  const [coverImage, setCoverImage] = useState('');
 
   
   const [content, setContent] = useState("");
@@ -67,7 +67,7 @@ const EditPost = (props) => {
         setTitle(passedData.title || '');
         setContent(passedData.content || '');
         setTags(passedData.tags || []);
-        setImageUrl(passedData.coverImage || '');
+        setCoverImage(passedData.coverImage || '');
     }
 }, [passedData]);
 
@@ -123,7 +123,7 @@ const EditPost = (props) => {
     if (selectedFile) {
       const reader = new FileReader();
       reader.onload = function(event) {
-        setImageUrl(event.target.result);
+        setCoverImage(event.target.result);
       }
       reader.readAsDataURL(selectedFile);
     }
@@ -183,13 +183,15 @@ const EditPost = (props) => {
      
   const onSubmit = async (e) =>{
     e.preventDefault();
-    if(file === null){
+    if(coverImage === null && file === null){
       alert('Please select cover image!');
       return;
     }
     setLoading(true);
     try {
-      const imageUrl = await uploadImage();
+      
+    const imageUrl = file ? await uploadImage() : coverImage;
+    
       if(passedData){
         await updatePost(imageUrl);
         alert('Post update successfully!');
@@ -245,7 +247,7 @@ const EditPost = (props) => {
         <div className="mb-8">
           <h3 className="text-2xl mb-1">Cover Image</h3>
           <div>
-            { imageUrl && <img className="mb-4" src={imageUrl} alt="cover"/>}
+            { coverImage && <img className="mb-4" src={coverImage} alt="cover"/>}
             <label className="text-violet-600 flex items-center cursor-pointer w-[130px] py-2 px-4 rounded border border-violet-600 hover:border-violet-800 hover:text-violet-800">
                 <AiOutlineFileAdd/>
                 <span>Select File</span>

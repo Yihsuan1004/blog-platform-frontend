@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 const api = axios.create({
   baseURL: `${process.env.REACT_APP_API_URL}/api`
 })
@@ -25,20 +26,17 @@ api.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-
 // 使用響應攔截器(interceptor)來處理 401 錯誤
 api.interceptors.response.use((response) => {
   return response;
 }, (error) => {
   if (error.response && error.response.status === 401) {
-    // 清除本地存儲的用戶信息或 token
     localStorage.removeItem('user');
-    
+    alert(error.response.message);
     // 重新導向到登入頁面
     window.location.href = '/login';
   }
   return Promise.reject(error);
 });
-
 
 export default api;
