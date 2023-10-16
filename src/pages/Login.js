@@ -9,27 +9,26 @@ const LoginPage = (props) => {
   const navigate = useNavigate();
   const { setIsLoggedIn } = useAuth();
 
-  const [errorMsg,setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const validateEmail = (value) => {
-    if (value.trim() === '') {
-      return { isValid: false, errorMessage: 'Email is required.' };
+    if (value.trim() === "") {
+      return { isValid: false, errorMessage: "Email is required." };
     }
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
     if (!emailRegex.test(value)) {
-      return { isValid: false, errorMessage: 'Please enter a valid email.' };
+      return { isValid: false, errorMessage: "Please enter a valid email." };
     }
-    return { isValid: true, errorMessage: '' };
+    return { isValid: true, errorMessage: "" };
   };
 
   const validatePassword = (value) => {
-    if (value.trim() === '') {
-      return { isValid: false, errorMessage: 'Password is required.' };
+    if (value.trim() === "") {
+      return { isValid: false, errorMessage: "Password is required." };
     }
-    return { isValid: true, errorMessage: '' };
+    return { isValid: true, errorMessage: "" };
   };
-
-
 
   const {
     value: email,
@@ -48,13 +47,11 @@ const LoginPage = (props) => {
     inputBlurHandler: passwordBlurHandler,
   } = useInput(validatePassword);
 
-
   let formIsValid = false;
 
   if (emailIsValid && passwordIsValid) {
     formIsValid = true;
   }
-
 
   const handleSubmit = (event) => {
     if (!formIsValid) return;
@@ -66,6 +63,8 @@ const LoginPage = (props) => {
       password,
     };
 
+    setLoading(true);
+
     api
       .post("/auth/login", userData)
       .then((result) => {
@@ -74,9 +73,12 @@ const LoginPage = (props) => {
         navigate("/");
       })
       .catch((error) => {
-        setErrorMsg('Login failed. Your email or password is incorrect.')
+        setErrorMsg("Login failed. Your email or password is incorrect.");
         console.error(error);
-      });
+      })
+      .finally(()=>{
+        setLoading(false);
+      });;
   };
 
   const emailInputClasses = emailInputHasError
@@ -104,7 +106,7 @@ const LoginPage = (props) => {
                                     rounded-md text-sm shadow-sm placeholder-slate-400
                                     focus:outline-none focus:ring-1  ${emailInputClasses}`}
           />
-          { emailInputHasError && (
+          {emailInputHasError && (
             <p className="text-red-500 text-sm">{emailErrorMessage}</p>
           )}
         </div>
@@ -123,12 +125,13 @@ const LoginPage = (props) => {
                                     rounded-md text-sm shadow-sm placeholder-slate-400
                                     focus:outline-none focus:ring-1  ${passwordInputClasses}`}
           />
-          { passwordInputHasError && (
+          {passwordInputHasError && (
             <p className="text-red-500 text-sm">Password is required</p>
           )}
         </div>
-        <button className="mt-8 px-4 py-2 bg-violet-600 hover:bg-violet-700  duration-200 text-white w-full rounded cursor-pointer">
-          Sign In
+        <button className="mt-8 px-4 py-2 bg-violet-600 hover:bg-violet-700  duration-200 text-white w-full rounded cursor-pointer disabled:opacity-50" 
+                disabled={loading}>
+          {loading ? <span class="loader-sm"></span> : "Sign In"}
         </button>
         {errorMsg && <p className="text-red-500 text-sm mt-2">{errorMsg}</p>}
         <div className="flex justify-center text-sm py-4">

@@ -1,23 +1,56 @@
-import postCover from '../assets/computer.jpg';
-import avatar from '../assets/avatar.jpg';
+import Tag from "./Tag";
+import { Link } from "react-router-dom";
+import { useEffect, useState , useCallback } from "react";
 
-const HomeItem = props =>{
-   return <div className="mx-auto py-8 w-auto">
-            <img src={postCover} alt="cover"/>
-            <div className="flex items-center mt-2">
-                <div className="text-left">
-                    <h3 className="text-2xl font-semibold">What is Micro Frontend?</h3>
-                    <p className="text-m text-gray-600">You may have heard from your backend team that </p>
-                    <div className="flex items-center my-4">
-                        <div className="w-[32px] h-[32px] rounded-full border border-gray-200 overflow-hidden">
-                            <img src={avatar} alt="avatar"/>
-                        </div>
-                        <p className="text-violet-600 ml-2 text-sm">Jonas Kakaroto</p>
-                        <p className="text-sm text-gray-400 ml-3 text-sm">Jan.10.2023</p>
-                    </div>
-                </div>
-            </div>
+const HomeItem = ({ post, id }) => {
+  const { content, title, tags, coverImage, author, createdDate } = post;
+
+  const [summary, setSummary] = useState("");
+
+  const getSummary =  useCallback(() => {
+    const domParser = new DOMParser();
+    const doc = domParser.parseFromString(content, "text/html");
+    const textContent = doc.body.textContent;
+    setSummary(textContent);
+  },[content]);
+
+  useEffect(() => {
+    getSummary();
+  }, [getSummary]);
+
+  return (
+    <div className="mx-auto py-8 w-auto">
+        <Link to={`/posts/${id}`}>
+        <img src={coverImage} alt="cover" />
+        <div className="text-left">
+          <h3 className="text-2xl font-semibold">{title}</h3>
+          <p className="mt-2 mb-4 text-sm text-gray-600 text-ellipsis">
+            {summary}
+          </p>
         </div>
-}
+        </Link>
+        <div className="flex items-center text-sm">
+          {tags.map((tag, index) => (
+            <Tag name={tag} key={index} classes={"mr-2"} />
+          ))}
+        </div>
+        <div className="flex items-center my-4">
+          {author.profileImage ? (
+            <div className="w-[28px] h-[28px] rounded-full border border-gray-200 overflow-hidden">
+              <img src={author.profileImage} alt="avatar" />
+            </div>
+          ) : (
+            <div className="w-[32px] h-[32px] rounded-full border bg-gray-400 text-white text-center leading-[32px] overflow-hidden">
+              {author.fullName[0]}
+            </div>
+          )}
+          <Link to={`/profile/${author._id}`}>
+            <p className="text-violet-600 ml-2 text-sm">{author.fullName}</p>
+          </Link>
+          <p className="text-sm text-gray-400 ml-3 text-sm">{createdDate}</p>
+        </div>
+      </div>
+  );
+};
 
 export default HomeItem;

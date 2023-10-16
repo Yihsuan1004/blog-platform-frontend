@@ -43,7 +43,7 @@ export default Header;
 
 
 const LoggedInComponents = () => {
-  const currentUserId = JSON.parse(localStorage.getItem("user")).data.id;
+  const currentUser = JSON.parse(localStorage.getItem("user")).data;
 
   
   const navigate = useNavigate();
@@ -65,7 +65,7 @@ const LoggedInComponents = () => {
       <Menu as="div" className="relative inline-block text-left">
         <Menu.Button>
           <div className="w-[32px] h-[32px] rounded-full overflow-hidden bg-gray-500 text-white leading-[32px]">
-            C
+            {currentUser.fullName[0]}
           </div>
         </Menu.Button>
         <Transition
@@ -79,8 +79,8 @@ const LoggedInComponents = () => {
         >
           <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right bg-white shadow-lg focus:outline-none flex flex-col rounded">
             <Menu.Item as={Fragment}>
-              <Link to={"profile/" + currentUserId}>
-                <p className="px-2 py-3">Account settings</p>
+              <Link to={`/profile/${currentUser.id}`}>                
+                <p className="px-2 py-3">My Profile</p>
               </Link>
             </Menu.Item>
             <Menu.Item as={Fragment}>

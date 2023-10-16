@@ -13,19 +13,24 @@ const BlogPost = props =>{
     const currentUserId = JSON.parse(localStorage.getItem("user")).data.id;
 
     useEffect(() => {
-        api.get(`/posts/${postId}`)
-        .then((result) => {
-            setData(result.data);
-        })
-        .catch((error) => {
-            alert('An error occurred:',error.message);
-            console.error(error);
-        })
-        .finally(() => {
-            setLoading(false);
-        });
-    },[])
+        const getPost = () =>{
+            api.get(`/posts/${postId}`)
+            .then((result) => {
+                setData(result.data);
+            })
+            .catch((error) => {
+                alert('An error occurred:',error.message);
+                console.error(error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+        }
 
+        getPost();
+    },[postId])
+
+   
     const handleDeletePost = () =>{
         api.delete(`/posts/${postId}`)
         .then((result) => {
@@ -57,16 +62,18 @@ const BlogPost = props =>{
         </section>
         <section className="flex items-center justify-between">
             <div className="flex items-center mb-4">
-                { data.author.coverImage ? 
+                { data.author.profileImage ? 
                     <div className="w-[32px] h-[32px] rounded-full border border-gray-200 overflow-hidden">
-                        <img src={data.author.coverImage} alt="avatar" /> 
+                        <img src={data.author.profileImage} alt="avatar" /> 
                     </div>: 
                     <div className="w-[32px] h-[32px] rounded-full border bg-gray-400 text-white text-center leading-[32px] overflow-hidden">
                         {data.author.fullName[0]}
                     </div>
                 }
                 <div className="ml-4">
+                <Link to={`/profile/${data.author._id}`}>
                     <p className="text-violet-600 text-sm">{data.author.fullName}</p>
+                </Link>
                     <p className="text-gray-400 text-sm tracking-wider">{data.createdDate}</p> 
                 </div>
             </div>

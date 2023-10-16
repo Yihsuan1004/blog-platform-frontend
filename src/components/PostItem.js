@@ -1,5 +1,5 @@
 import Tag from "./Tag";
-import { useEffect, useState } from "react";
+import { useEffect, useState , useCallback } from "react";
 import { Link } from "react-router-dom";
 
 const PostItem = ({ post, id, isShowAuthor }) => {
@@ -7,16 +7,16 @@ const PostItem = ({ post, id, isShowAuthor }) => {
 
   const [summary, setSummary] = useState("");
 
-  const getSummary = () => {
+  const getSummary =  useCallback(() => {
     const domParser = new DOMParser();
     const doc = domParser.parseFromString(content, "text/html");
     const textContent = doc.body.textContent;
     setSummary(textContent);
-  };
+  },[content]);
 
   useEffect(() => {
     getSummary();
-  }, []);
+  }, [getSummary]);
 
   return (
       <div className="mb-8">
@@ -50,6 +50,7 @@ const PostItem = ({ post, id, isShowAuthor }) => {
         </Link>
         {isShowAuthor ? (
           <div className="flex items-center mt-4">
+            <Link to={`/profile/${author._id}`}>
             {author.profileImage ? (
               <div className="w-[28px] h-[28px] rounded-full border border-gray-200 overflow-hidden">
                 <img src={author.profileImage} alt="avatar" />
@@ -59,7 +60,6 @@ const PostItem = ({ post, id, isShowAuthor }) => {
                 {author.fullName[0]}
               </div>
             )}
-            <Link to={`/profile/${author._id}`}>
               <p className="text-violet-600 ml-2 text-sm">{author.fullName}</p>
             </Link>
             <p className="text-sm text-gray-400 ml-3 text-sm">{createdDate}</p>

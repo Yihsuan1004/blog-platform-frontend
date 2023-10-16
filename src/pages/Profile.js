@@ -13,6 +13,20 @@ const Profile = (props) => {
     const currentUserId = JSON.parse(localStorage.getItem("user")).data.id;
 
     useEffect(() => {
+        const getUserInfo = () =>{
+            return api.get(`users/${userId}/profile`)
+            .then((result) => {
+                return result.data;
+            })
+        } ;
+    
+        const getUserPosts = () =>{
+            return  api.get(`users/${userId}/posts`)
+            .then((result) => {
+                return result.data;
+            })
+        };
+
         Promise.all([
             getUserInfo(),
             getUserPosts()
@@ -28,22 +42,10 @@ const Profile = (props) => {
           .finally(() => {
             setLoading(false);
           });
-      },[])
+      },[userId])
   
 
-    const getUserInfo = () =>{
-        return api.get(`users/${userId}/profile`)
-        .then((result) => {
-            return result.data;
-        })
-    } ;
-
-    const getUserPosts = () =>{
-        return  api.get(`users/${userId}/posts`)
-        .then((result) => {
-            return result.data;
-        })
-    } ;
+    
 
     if (loading) {
     return <div className="absolute top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 text-4xl">

@@ -7,20 +7,27 @@ const PostList = props =>{
 
     const [keyword, setKeyword] =  useState('');
 
+    const [loading, setLoading] = useState(false);
+
     useEffect(() => {
+        const getPageData = () =>{
+            setLoading(true);
+            api.get('/posts?top=20')
+            .then((result) => {
+                setPostList(result.data);
+            })
+            .catch((error) => {
+                alert('An error occurred:',error.message);
+                console.error(error);
+            })
+            .finally(()=>{
+                setLoading(false);
+            });
+        }
         getPageData();
       },[])
   
-    const getPageData = () =>{
-        api.get('/posts?top=20')
-        .then((result) => {
-            setPostList(result.data);
-        })
-        .catch((error) => {
-            alert('An error occurred:',error.message);
-            console.error(error);
-        });
-    }
+    
 
     const handleInputChange = (event) =>{
         const value = event.target.value;
@@ -30,12 +37,16 @@ const PostList = props =>{
 
     const handleSearch = () =>{
         const url = `/posts?title=${keyword}`;
+        setLoading(true);
         api.get(url).then(response => {
             setPostList(response.data);
         }).catch((error) => {
             alert('An error occurred:',error.message);
             console.error(error);
-        });      
+        })
+        .finally(()=>{
+            setLoading(false);
+        });;     
     }
 
     return <div className="w-[600px] mx-auto">
@@ -64,11 +75,14 @@ const PostList = props =>{
             <span className="ml-2 text-gray-500">{postList.length || 0}
             </span> entries
             </p>
-        </div>
+        </div>  
         <div className="py-8"> 
-            { postList.map(post => <PostItem key={post._id} post={post} id={post._id} isShowAuthor={true}/>)}
+            {
+                loading
+                ? <div className="w-full text-center"><span className="loader-lg"></span></div>
+                : <div>{ postList.map(post => <PostItem key={post._id} post={post} id={post._id} isShowAuthor={true}/>)}</div>
+            }
         </div>
-
     </div>
 }
 

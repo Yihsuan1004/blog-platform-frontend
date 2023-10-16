@@ -1,4 +1,4 @@
-import avatar from "../assets/avatar.jpg";
+import { Link } from "react-router-dom";
 
 const TagItem = ({ posts, tag }) => {
   return (
@@ -6,12 +6,13 @@ const TagItem = ({ posts, tag }) => {
       <h1 className="text-violet-600 text-2xl">{tag}</h1>
       <div className="ml-8">
         {posts.map((post, index) => (
+           <Link to={`/posts/${post.id}`}>
           <div className="mt-5 pb-5 border-b border-gray-100" key={index}>
             <h3 className="text-2xl mb-2">{post.title}</h3>
             <div className="flex items-center">
-              {post.author.coverImage ? (
+              {post.author.profileImage ? (
                 <div className="w-[32px] h-[32px] rounded-full border border-gray-200 overflow-hidden">
-                  <img src={post.author.coverImage} alt="avatar" />
+                  <img src={post.author.profileImage} alt="avatar" />
                 </div>
               ) : (
                 <div className="w-[32px] h-[32px] rounded-full border bg-gray-400 text-white text-center leading-[32px] overflow-hidden">
@@ -24,6 +25,7 @@ const TagItem = ({ posts, tag }) => {
               </p>
             </div>
           </div>
+          </Link>
         ))}
       </div>
     </div>

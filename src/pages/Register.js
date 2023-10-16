@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/api";
 import Card from "../components/Card";
@@ -5,6 +6,8 @@ import useInput from "../hooks/useInput";
 
 const RegisterPage = (props) => {
   const navigate = useNavigate();
+
+  const [loading, setLoading] = useState(false);
 
   const validateFullName= (value) => {
     if (value.trim() === '') {
@@ -106,6 +109,7 @@ const RegisterPage = (props) => {
       fullName
     };
 
+    setLoading(true);
     api
       .post("/auth/register", userData)
       .then((result) => {
@@ -115,6 +119,9 @@ const RegisterPage = (props) => {
       })
       .catch((error) => {
         console.error(error);
+      })
+      .finally(()=>{
+        setLoading(false);
       });
   };
 
@@ -206,8 +213,9 @@ const RegisterPage = (props) => {
             <p className="text-red-500 text-sm">{confirmPasswordErrorMessage}</p>
           )}
         </div>
-        <button className="mt-8 px-4 py-2 bg-violet-600 hover:bg-violet-700  duration-200 text-white w-full rounded cursor-pointer">
-          Sign Up
+        <button className="mt-8 px-4 py-2 bg-violet-600 hover:bg-violet-700  duration-200 text-white w-full rounded cursor-pointer disabled:opacity-50" 
+                disabled={loading}>
+          {loading ? <span class="loader-sm"></span> : "Sign Up"}
         </button>
         <div className="flex text-sm py-4 justify-center">
           <p className="text-gray-400">Already have an account?</p>

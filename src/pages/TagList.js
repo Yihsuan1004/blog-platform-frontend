@@ -5,8 +5,10 @@ import TagItem from "../components/TagItem";
 const TagList = (props) => {
   const [tagList, setTagList] = useState([]);
   const [tag, setTag] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSearch = () => {
+    setLoading(true);
     const url = `/posts/byTag?tag=${tag}`;
     api
       .get(url)
@@ -15,20 +17,12 @@ const TagList = (props) => {
       })
       .catch((error) => {
         console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
-  const getDataByTag = () => {
-    const url = `/posts/byTag`;
-    api
-      .get(url)
-      .then((response) => {
-        setTagList(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -36,6 +30,21 @@ const TagList = (props) => {
   };
 
   useEffect(() => {
+    const getDataByTag = () => {
+      setLoading(true);
+      const url = `/posts/byTag`;
+      api
+        .get(url)
+        .then((response) => {
+          setTagList(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    };
     getDataByTag();
   }, []);
 
@@ -66,11 +75,18 @@ const TagList = (props) => {
       </div>
 
       <div className="py-8">
-        { 
-            tagList && tagList.map((data, index) => 
+        {loading ? (
+          <div className="w-full text-center">
+            <span className="loader-lg"></span>
+          </div>
+        ) : (
+          <div>
+            {tagList &&
+              tagList.map((data, index) => (
                 <TagItem key={index} posts={data.posts} tag={data.tag} />
-            )
-        }
+              ))}
+          </div>
+        )}
       </div>
     </div>
   );

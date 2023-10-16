@@ -1,9 +1,28 @@
 import { Fragment } from 'react';
+import { useEffect, useState } from 'react';
+import api from '../api/api';
 import HomeItem from '../components/HomeItem';
 import BlogCover from '../assets/blog-cover.jpg';
 
 const HomePage = props =>{
 
+    const [postList, setPostList] = useState([]);
+
+    useEffect(() => {
+        const getPageData = () =>{
+            api.get('/posts?top=6')
+            .then((result) => {
+                setPostList(result.data);
+            })
+            .catch((error) => {
+                alert('An error occurred:',error.message);
+                console.error(error);
+            });
+        }
+        getPageData();
+      },[])
+  
+   
     return <Fragment>
         <div className="w-screen pb-8 border-gray-200">
             <div className="py-10 mx-auto flex justify-center items-center">
@@ -19,12 +38,7 @@ const HomePage = props =>{
         <div className="lg:w-[1024px] md:w-full md:px-8 px-6 mx-auto mt-12">
             <h2 className="text-violet-600 text-3xl font-semibold">Latest Posts</h2>
             <div className="grid gap-8 grid-cols-1 grid-rows-6 lg:grid-cols-3 lg:grid-rows-2 sm:grid-cols-2 md:grid-rows-3">
-                <HomeItem />
-                <HomeItem />
-                <HomeItem />
-                <HomeItem />
-                <HomeItem />
-                <HomeItem />
+                { postList.map(post =>  <HomeItem  key={post._id} post={post} id={post._id}/>)}
             </div>
         </div>
        

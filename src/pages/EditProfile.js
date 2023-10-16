@@ -1,5 +1,5 @@
 import api from "../api/api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import useInput from "../hooks/useInput";
 import { useEffect, useState } from "react";
 import { AiFillEdit } from "react-icons/ai";
