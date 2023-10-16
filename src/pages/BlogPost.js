@@ -53,7 +53,7 @@ const BlogPost = props =>{
   }
 
     return <div className="w-[800px] mx-auto">
-        <section className="max-h-80 overflow-hidden mt-10">
+        <section className="mt-10">
          <img className="w-full h-auto" src={data.coverImage}  alt='cover'/>
         </section>
         <h1 className="text-4xl font-bold  mt-8 mb-4">{data.title}</h1>

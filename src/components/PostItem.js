@@ -51,16 +51,18 @@ const PostItem = ({ post, id, isShowAuthor }) => {
         {isShowAuthor ? (
           <div className="flex items-center mt-4">
             <Link to={`/profile/${author._id}`}>
-            {author.profileImage ? (
-              <div className="w-[28px] h-[28px] rounded-full border border-gray-200 overflow-hidden">
-                <img src={author.profileImage} alt="avatar" />
-              </div>
-            ) : (
-              <div className="w-[32px] h-[32px] rounded-full border bg-gray-400 text-white text-center leading-[32px] overflow-hidden">
-                {author.fullName[0]}
-              </div>
-            )}
+            <div className="flex items-center">
+              {author.profileImage ? (
+                <div className="w-[28px] h-[28px] rounded-full border border-gray-200 overflow-hidden">
+                  <img src={author.profileImage} alt="avatar" />
+                </div>
+              ) : (
+                <div className="w-[32px] h-[32px] rounded-full border bg-gray-400 text-white text-center leading-[32px] overflow-hidden">
+                  {author.fullName[0]}
+                </div>
+              )}
               <p className="text-violet-600 ml-2 text-sm">{author.fullName}</p>
+            </div>
             </Link>
             <p className="text-sm text-gray-400 ml-3 text-sm">{createdDate}</p>
           </div>
