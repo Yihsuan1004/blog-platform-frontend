@@ -37,10 +37,10 @@ const PostItem = ({ post, id, isShowAuthor }) => {
               ))}
             </div>
           </div>
-          <div className="w-auto max-h-[100px]">
+          <div className="w-auto">
             {coverImage && (
               <img
-                className="max-h-[100px] max-w-none"
+                className="w-[112px] h-[112px] object-cover	max-w-none"
                 src={coverImage}
                 alt="cover"
               />

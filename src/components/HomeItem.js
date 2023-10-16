@@ -21,7 +21,7 @@ const HomeItem = ({ post, id }) => {
   return (
     <div className="mx-auto py-8 w-auto">
         <Link to={`/posts/${id}`}>
-        <div className="h-[200px] overflow-hidden relative">
+        <div className="h-[200px] overflow-hidden relative bg-gray-900">
           <img className="w-full h-auto absolute top-1/2 -translate-y-1/2" src={coverImage} alt="cover" />
         </div>
         <div className="text-left">
